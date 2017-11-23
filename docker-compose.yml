@@ -1,0 +1,25 @@
+web:
+    image: nginx:latest
+    ports:
+        - "80:80"
+    volumes:
+        - ./code:/code
+        - ./default.conf:/etc/nginx/conf.d/default.conf
+    links:
+        - php
+php:
+    build: .
+    links:
+        - mysql
+    volumes:
+        - ./code:/code
+mysql:
+    image: mariadb
+    command: mysqld --log-bin-trust-function-creators=1
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: meetup
+      MYSQL_USER: meetup
+      MYSQL_PASSWORD: meetup
